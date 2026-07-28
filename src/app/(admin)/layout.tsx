@@ -1,4 +1,4 @@
-import { AdminShell } from "@/components/layout/admin-shell";
+import { AdminShell } from "@/features/dashboard/components/admin-shell";
 
 export default function ProtectedLayout({
   children

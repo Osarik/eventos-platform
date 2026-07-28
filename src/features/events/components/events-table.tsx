@@ -11,9 +11,9 @@ import {
   TableRow
 } from "@/components/ui/table";
 import { formatCurrency, formatDate } from "@/lib/format";
-import type { Event } from "@/types/database";
+import type { EventWithStats } from "@/features/events/types";
 
-export function EventsTable({ events }: { events: Event[] }) {
+export function EventsTable({ events }: { events: EventWithStats[] }) {
   return (
     <Table>
       <TableHeader>
@@ -34,9 +34,9 @@ export function EventsTable({ events }: { events: Event[] }) {
                 {event.venue}, {event.city}
               </div>
             </TableCell>
-            <TableCell>{formatDate(event.startsAt)}</TableCell>
+            <TableCell>{formatDate(event.starts_at)}</TableCell>
             <TableCell>
-              {event.sold}/{event.capacity} · {formatCurrency(event.price)}
+              {event.sold}/{event.capacity} · {formatCurrency(event.price_cop)}
             </TableCell>
             <TableCell>
               <Badge

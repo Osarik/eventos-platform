@@ -1,7 +1,7 @@
 import { LockKeyhole } from "lucide-react";
 import { Suspense } from "react";
 
-import { LoginForm } from "@/components/forms/login-form";
+import { LoginForm } from "@/features/auth/components/login-form";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export const metadata = {

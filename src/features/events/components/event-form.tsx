@@ -8,7 +8,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { eventSchema, type EventFormValues } from "@/validators/event";
+import {
+  eventFormSchema,
+  type EventFormValues
+} from "@/features/events/validators";
 
 export function EventForm() {
   const {
@@ -16,7 +19,7 @@ export function EventForm() {
     handleSubmit,
     formState: { errors, isSubmitting }
   } = useForm<EventFormValues>({
-    resolver: zodResolver(eventSchema),
+    resolver: zodResolver(eventFormSchema),
     defaultValues: {
       title: "Nuevo evento",
       status: "draft",

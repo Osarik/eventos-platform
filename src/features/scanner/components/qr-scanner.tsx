@@ -7,12 +7,24 @@ import { useEffect, useId, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { findTicketByCode } from "@/services/tickets/ticket-service";
+import { MockValidationService } from "@/features/scanner/services/validation-service";
+
+const validationService = new MockValidationService();
 
 export function QrScanner() {
   const scannerId = useId().replace(/:/g, "");
-  const [code, setCode] = useState("");
-  const ticket = code ? findTicketByCode(code) : undefined;
+  const [token, setToken] = useState("");
+  const [result, setResult] = useState<{
+    valid: boolean;
+    status: string;
+    message: string;
+    ticket?: {
+      attendeeName?: string;
+      attendeeEmail?: string;
+      eventTitle?: string;
+      checkedInAt?: string | null;
+    };
+  } | null>(null);
 
   useEffect(() => {
     const scanner = new Html5QrcodeScanner(
@@ -22,7 +34,10 @@ export function QrScanner() {
     );
 
     scanner.render(
-      (decodedText) => setCode(decodedText),
+      (decodedText) => {
+        setToken(decodedText);
+        validationService.validateByToken(decodedText).then(setResult);
+      },
       () => undefined
     );
 
@@ -30,6 +45,12 @@ export function QrScanner() {
       scanner.clear().catch(() => undefined);
     };
   }, [scannerId]);
+
+  async function handleManualValidate() {
+    if (!token) return;
+    const res = await validationService.validateByToken(token);
+    setResult(res);
+  }
 
   return (
     <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
@@ -49,44 +70,53 @@ export function QrScanner() {
           <div className="relative">
             <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
             <Input
-              value={code}
-              onChange={(event) => setCode(event.target.value)}
-              placeholder="Pegar codigo manualmente"
+              value={token}
+              onChange={(e) => setToken(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleManualValidate()}
+              placeholder="Pegar token manualmente"
               className="pl-9"
             />
           </div>
-          {!code && (
+          {!token && (
             <p className="text-sm text-muted-foreground">
-              Escanea un QR o pega un codigo para validar la entrada.
+              Escanea un QR o pega un token para validar la entrada.
             </p>
           )}
-          {code && ticket?.status === "valid" && (
+          {result?.valid && (
             <div className="rounded-lg border border-accent/40 bg-accent/10 p-4">
               <CheckCircle2 className="mb-3 h-6 w-6 text-accent" />
               <h3 className="font-semibold">Entrada valida</h3>
               <p className="mt-1 text-sm text-muted-foreground">
-                {ticket.attendeeName} · {ticket.attendeeEmail}
+                {result.ticket?.attendeeName} · {result.ticket?.attendeeEmail}
+              </p>
+              <p className="text-xs text-muted-foreground">
+                {result.ticket?.eventTitle}
               </p>
               <Badge className="mt-3" variant="success">
                 Permitir ingreso
               </Badge>
             </div>
           )}
-          {code && ticket?.status === "used" && (
+          {result && !result.valid && result.status === "used" && (
             <div className="rounded-lg border p-4">
               <XCircle className="mb-3 h-6 w-6 text-muted-foreground" />
               <h3 className="font-semibold">Entrada usada</h3>
               <p className="mt-1 text-sm text-muted-foreground">
                 Esta entrada ya fue validada anteriormente.
               </p>
+              {result.ticket?.checkedInAt && (
+                <p className="text-xs text-muted-foreground">
+                  Ingreso: {result.ticket.checkedInAt}
+                </p>
+              )}
             </div>
           )}
-          {code && !ticket && (
+          {result && !result.valid && result.status === "invalid" && (
             <div className="rounded-lg border border-destructive/40 bg-destructive/10 p-4">
               <XCircle className="mb-3 h-6 w-6 text-destructive" />
               <h3 className="font-semibold">Entrada invalida</h3>
               <p className="mt-1 text-sm text-muted-foreground">
-                No encontramos este codigo en la base de datos local.
+                No encontramos este token en la base de datos.
               </p>
             </div>
           )}

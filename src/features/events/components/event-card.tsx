@@ -4,7 +4,7 @@ import { CalendarDays, MapPin } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import type { Event } from "@/types/database";
+import type { Event } from "@/features/events/types";
 import { formatCurrency, formatDate } from "@/lib/format";
 
 export function EventCard({ event }: { event: Event }) {
@@ -12,7 +12,7 @@ export function EventCard({ event }: { event: Event }) {
     <article className="overflow-hidden rounded-lg border bg-card">
       <div className="relative aspect-[16/10]">
         <Image
-          src={event.imageUrl}
+          src={event.image_path ?? "/placeholder.svg"}
           alt={event.title}
           fill
           className="object-cover"
@@ -25,7 +25,7 @@ export function EventCard({ event }: { event: Event }) {
             {event.status}
           </Badge>
           <span className="text-sm font-medium">
-            {formatCurrency(event.price)}
+            {formatCurrency(event.price_cop)}
           </span>
         </div>
         <div>
@@ -37,7 +37,7 @@ export function EventCard({ event }: { event: Event }) {
         <div className="space-y-2 text-sm text-muted-foreground">
           <p className="flex items-center gap-2">
             <CalendarDays className="h-4 w-4" />
-            {formatDate(event.startsAt)}
+            {formatDate(event.starts_at)}
           </p>
           <p className="flex items-center gap-2">
             <MapPin className="h-4 w-4" />

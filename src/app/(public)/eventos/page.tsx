@@ -1,12 +1,13 @@
-import { EventCard } from "@/components/cards/event-card";
-import { listEvents } from "@/services/events/event-service";
+import { EventCard } from "@/features/events/components/event-card";
+import { EventMockRepository } from "@/features/events/services/event-mock-repository";
 
 export const metadata = {
   title: "Eventos"
 };
 
-export default function EventsPage() {
-  const events = listEvents();
+export default async function EventsPage() {
+  const eventRepo = new EventMockRepository();
+  const events = await eventRepo.listActive();
 
   return (
     <main className="container py-14">

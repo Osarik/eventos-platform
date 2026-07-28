@@ -9,7 +9,37 @@ import {
   TableRow
 } from "@/components/ui/table";
 import { formatCurrency, formatDate } from "@/lib/format";
-import { purchases } from "@/services/events/mock-data";
+
+type PurchaseRow = {
+  id: string;
+  buyerName: string;
+  buyerEmail: string;
+  quantity: number;
+  amount: number;
+  status: string;
+  createdAt: string;
+};
+
+const mockPurchases: PurchaseRow[] = [
+  {
+    id: "buy_001",
+    buyerName: "Laura Gomez",
+    buyerEmail: "laura@example.com",
+    quantity: 2,
+    amount: 178000,
+    status: "paid",
+    createdAt: "2026-07-21T14:18:00-05:00"
+  },
+  {
+    id: "buy_002",
+    buyerName: "Andres Mora",
+    buyerEmail: "andres@example.com",
+    quantity: 1,
+    amount: 149000,
+    status: "pending",
+    createdAt: "2026-07-22T09:41:00-05:00"
+  }
+];
 
 export const metadata = {
   title: "Ventas"
@@ -40,7 +70,7 @@ export default function SalesPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {purchases.map((purchase) => (
+              {mockPurchases.map((purchase) => (
                 <TableRow key={purchase.id}>
                   <TableCell>
                     <div className="font-medium">{purchase.buyerName}</div>

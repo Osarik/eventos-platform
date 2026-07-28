@@ -1,33 +1,9 @@
-import { events } from "@/services/events/mock-data";
+import { EventMockRepository } from "@/features/events/services/event-mock-repository";
 
-export function listEvents() {
-  return events;
-}
+const repo = new EventMockRepository();
 
-export function listActiveEvents() {
-  return events.filter((event) => event.status === "active");
-}
-
-export function getEventBySlug(slug: string) {
-  return events.find((event) => event.slug === slug);
-}
-
-export function getEventById(id: string) {
-  return events.find((event) => event.id === id);
-}
-
-export function getEventStats() {
-  const totalRevenue = events.reduce(
-    (sum, event) => sum + event.price * event.sold,
-    0
-  );
-  const ticketsSold = events.reduce((sum, event) => sum + event.sold, 0);
-  const activeEvents = events.filter((event) => event.status === "active");
-
-  return {
-    totalRevenue,
-    ticketsSold,
-    activeEvents: activeEvents.length,
-    conversionRate: 68
-  };
-}
+export const listEvents = () => repo.list();
+export const listActiveEvents = () => repo.listActive();
+export const getEventBySlug = (slug: string) => repo.getBySlug(slug);
+export const getEventById = (id: string) => repo.getById(id);
+export const getEventStats = () => repo.getStats();

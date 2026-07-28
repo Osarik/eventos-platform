@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatCurrency, formatDate } from "@/lib/format";
-import { getEventBySlug } from "@/services/events/event-service";
+import { EventMockRepository } from "@/features/events/services/event-mock-repository";
 
 export default async function EventDetailPage({
   params
@@ -15,7 +15,8 @@ export default async function EventDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const event = getEventBySlug(slug);
+  const eventRepo = new EventMockRepository();
+  const event = await eventRepo.getBySlug(slug);
 
   if (!event) {
     notFound();
@@ -27,7 +28,7 @@ export default async function EventDetailPage({
         <div className="container grid gap-10 py-12 lg:grid-cols-[1.2fr_0.8fr]">
           <div className="relative aspect-[16/9] overflow-hidden rounded-lg border">
             <Image
-              src={event.imageUrl}
+              src={event.image_path ?? "/placeholder.svg"}
               alt={event.title}
               fill
               priority
@@ -52,7 +53,7 @@ export default async function EventDetailPage({
             <div className="grid gap-3 text-sm text-muted-foreground">
               <p className="flex items-center gap-2">
                 <CalendarDays className="h-4 w-4" />
-                {formatDate(event.startsAt)}
+                {formatDate(event.starts_at)}
               </p>
               <p className="flex items-center gap-2">
                 <MapPin className="h-4 w-4" />
@@ -60,7 +61,7 @@ export default async function EventDetailPage({
               </p>
               <p className="flex items-center gap-2">
                 <Ticket className="h-4 w-4" />
-                {formatCurrency(event.price)}
+                {formatCurrency(event.price_cop)}
               </p>
             </div>
             <Button asChild size="lg">

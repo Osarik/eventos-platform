@@ -1,4 +1,4 @@
-import { QrScanner } from "@/components/scanner/qr-scanner";
+import { QrScanner } from "@/features/scanner/components/qr-scanner";
 
 export const metadata = {
   title: "Scanner"

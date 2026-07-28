@@ -9,9 +9,9 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table";
-import type { Ticket } from "@/types/database";
+import type { TicketWithDetails } from "@/features/tickets/types";
 
-export function TicketsTable({ tickets }: { tickets: Ticket[] }) {
+export function TicketsTable({ tickets }: { tickets: TicketWithDetails[] }) {
   return (
     <Table>
       <TableHeader>
@@ -27,14 +27,14 @@ export function TicketsTable({ tickets }: { tickets: Ticket[] }) {
           <TableRow key={ticket.id}>
             <TableCell>
               <div className="flex h-14 w-14 items-center justify-center rounded-md bg-white p-2">
-                <QRCode value={ticket.code} size={40} />
+                <QRCode value={ticket.secure_token} size={40} />
               </div>
             </TableCell>
             <TableCell className="font-mono text-xs">{ticket.code}</TableCell>
             <TableCell>
-              <div className="font-medium">{ticket.attendeeName}</div>
+              <div className="font-medium">{ticket.attendee_name}</div>
               <div className="text-sm text-muted-foreground">
-                {ticket.attendeeEmail}
+                {ticket.attendee_email}
               </div>
             </TableCell>
             <TableCell>

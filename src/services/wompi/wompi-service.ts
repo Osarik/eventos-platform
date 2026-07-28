@@ -1,16 +1,4 @@
-type CheckoutDraft = {
-  eventId: string;
-  buyerName: string;
-  buyerEmail: string;
-  buyerPhone: string;
-  quantity: number;
-};
+import { wompiProvider } from "@/features/payments/services/wompi-provider";
 
-export async function createWompiCheckout(draft: CheckoutDraft) {
-  void draft;
-
-  return {
-    status: "not_implemented" as const,
-    message: "Wompi sera conectado en un sprint posterior."
-  };
-}
+export const createWompiCheckout =
+  wompiProvider.createCheckout.bind(wompiProvider);

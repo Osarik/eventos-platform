@@ -58,7 +58,9 @@ export async function middleware(request: NextRequest) {
       .eq("id", user.id)
       .single();
 
-    if (!profile || !["admin", "staff"].includes(profile.role)) {
+    const allowedRoles = ["super_admin", "admin", "staff"];
+
+    if (!profile || !allowedRoles.includes(profile.role)) {
       const redirectUrl = request.nextUrl.clone();
       redirectUrl.pathname = "/login";
       redirectUrl.searchParams.set("next", request.nextUrl.pathname);

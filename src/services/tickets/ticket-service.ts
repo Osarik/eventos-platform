@@ -1,9 +1,7 @@
-import { tickets } from "@/services/events/mock-data";
+import { TicketMockRepository } from "@/features/tickets/services/ticket-mock-repository";
 
-export function listTickets() {
-  return tickets;
-}
+const repo = new TicketMockRepository();
 
-export function findTicketByCode(code: string) {
-  return tickets.find((ticket) => ticket.code === code);
-}
+export const listTickets = () => repo.list();
+export const findTicketByCode = (code: string) => repo.getByCode(code);
+export const listTicketsWithDetails = () => repo.listWithDetails();

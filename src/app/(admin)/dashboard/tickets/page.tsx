@@ -1,16 +1,17 @@
 import { Search } from "lucide-react";
 
-import { TicketsTable } from "@/components/tables/tickets-table";
+import { TicketsTable } from "@/features/tickets/components/tickets-table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { listTickets } from "@/services/tickets/ticket-service";
+import { TicketMockRepository } from "@/features/tickets/services/ticket-mock-repository";
 
 export const metadata = {
   title: "Tickets"
 };
 
-export default function TicketsPage() {
-  const tickets = listTickets();
+export default async function TicketsPage() {
+  const ticketRepo = new TicketMockRepository();
+  const tickets = await ticketRepo.listWithDetails();
 
   return (
     <div className="space-y-8">

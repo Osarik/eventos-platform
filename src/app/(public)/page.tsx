@@ -1,12 +1,13 @@
 import Link from "next/link";
-import { ArrowRight, ShieldCheck, Sparkles, TicketCheck } from "lucide-react";
+import { ArrowRight, CalendarDays, MapPin, TicketCheck } from "lucide-react";
 
-import { EventCard } from "@/components/cards/event-card";
+import { EventCard } from "@/features/events/components/event-card";
 import { Button } from "@/components/ui/button";
-import { listActiveEvents } from "@/services/events/event-service";
+import { EventMockRepository } from "@/features/events/services/event-mock-repository";
 
-export default function HomePage() {
-  const featuredEvents = listActiveEvents();
+export default async function HomePage() {
+  const eventRepo = new EventMockRepository();
+  const featuredEvents = await eventRepo.listActive();
 
   return (
     <main>
@@ -14,16 +15,16 @@ export default function HomePage() {
         <div className="container grid min-h-[calc(100vh-4rem)] items-center gap-12 py-20 lg:grid-cols-[1.05fr_0.95fr]">
           <div className="max-w-3xl space-y-8">
             <div className="inline-flex items-center gap-2 rounded-md border px-3 py-1 text-sm text-muted-foreground">
-              <Sparkles className="h-4 w-4 text-accent" />
+              <TicketCheck className="h-4 w-4 text-accent" />
               SaaS de boleteria preparado para crecer
             </div>
             <div className="space-y-5">
               <h1 className="text-balance text-5xl font-semibold tracking-tight sm:text-6xl">
-                Eventos Platform
+                Descubre y asegura tu entrada
               </h1>
               <p className="max-w-2xl text-lg leading-8 text-muted-foreground">
-                Crea eventos, vende entradas, genera codigos QR y valida
-                asistentes desde una operacion moderna, rapida y segura.
+                Los mejores eventos, conciertos y experiencias culturales.
+                Compra tus entradas al instante con codigos QR seguros.
               </p>
             </div>
             <div className="flex flex-col gap-3 sm:flex-row">
@@ -33,27 +34,24 @@ export default function HomePage() {
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </Button>
-              <Button asChild size="lg" variant="outline">
-                <Link href="/login">Entrar al admin</Link>
-              </Button>
             </div>
           </div>
           <div className="grid gap-4">
             {[
               {
+                icon: CalendarDays,
+                title: "Eventos exclusivos",
+                text: "Conciertos, conferencias, festivales y experiencias culturales seleccionadas para ti."
+              },
+              {
                 icon: TicketCheck,
                 title: "Tickets con QR",
-                text: "Cada compra queda lista para emitir entradas unicas."
+                text: "Compra y recibe tu codigo QR unico al instante. Entrada segura sin filas."
               },
               {
-                icon: ShieldCheck,
-                title: "Validacion protegida",
-                text: "Scanner preparado para consultar Supabase en tiempo real."
-              },
-              {
-                icon: ArrowRight,
-                title: "Pagos Wompi",
-                text: "Flujo de checkout desacoplado para integrar pagos despues."
+                icon: MapPin,
+                title: "Cobertura nacional",
+                text: "Eventos en las principales ciudades de Colombia. Siempre hay algo cerca de ti."
               }
             ].map((item) => (
               <div key={item.title} className="rounded-lg border bg-card p-5">
@@ -72,7 +70,7 @@ export default function HomePage() {
           <div>
             <p className="text-sm font-medium text-primary">Eventos activos</p>
             <h2 className="mt-2 text-3xl font-semibold tracking-tight">
-              Experiencias listas para vender
+              Experiencias listas para vivir
             </h2>
           </div>
           <Button asChild variant="outline">

@@ -18,9 +18,6 @@ export function PublicNavbar() {
           <Link href="/eventos" className="hover:text-foreground">
             Eventos
           </Link>
-          <Link href="/login" className="hover:text-foreground">
-            Admin
-          </Link>
         </nav>
         <div className="flex items-center gap-2">
           <ThemeToggle />

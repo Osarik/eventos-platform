@@ -1,17 +1,18 @@
 import { Plus } from "lucide-react";
 
-import { EventForm } from "@/components/forms/event-form";
-import { EventsTable } from "@/components/tables/events-table";
+import { EventForm } from "@/features/events/components/event-form";
+import { EventsTable } from "@/features/events/components/events-table";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { listEvents } from "@/services/events/event-service";
+import { EventMockRepository } from "@/features/events/services/event-mock-repository";
 
 export const metadata = {
   title: "Eventos Admin"
 };
 
-export default function AdminEventsPage() {
-  const events = listEvents();
+export default async function AdminEventsPage() {
+  const eventRepo = new EventMockRepository();
+  const events = await eventRepo.getWithStats();
 
   return (
     <div className="space-y-8">
