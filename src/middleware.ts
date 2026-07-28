@@ -51,23 +51,6 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(redirectUrl);
   }
 
-  if (isProtectedRoute && user) {
-    const { data: profile } = await supabase
-      .from("usuarios")
-      .select("role")
-      .eq("id", user.id)
-      .single();
-
-    const allowedRoles = ["super_admin", "admin", "staff"];
-
-    if (!profile || !allowedRoles.includes(profile.role)) {
-      const redirectUrl = request.nextUrl.clone();
-      redirectUrl.pathname = "/login";
-      redirectUrl.searchParams.set("next", request.nextUrl.pathname);
-      return NextResponse.redirect(redirectUrl);
-    }
-  }
-
   return response;
 }
 
