@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { LogIn } from "lucide-react";
 import { useState } from "react";
 
@@ -10,7 +10,6 @@ import { Label } from "@/components/ui/label";
 import { createSupabaseBrowserClient } from "@/services/supabase/client";
 
 export function LoginForm() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -37,8 +36,8 @@ export function LoginForm() {
       return;
     }
 
-    router.push(searchParams.get("next") ?? "/dashboard");
-    router.refresh();
+    const destination = searchParams.get("next") ?? "/dashboard";
+    window.location.href = destination;
   }
 
   return (
