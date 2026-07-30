@@ -48,18 +48,18 @@ async function PublicHome() {
 
   return (
     <main>
-      <section className="relative flex min-h-[90vh] items-center justify-center overflow-hidden border-b">
+      <section className="relative flex min-h-[70vh] items-center justify-center overflow-hidden border-b">
         <div className="absolute inset-0">
           <Image
             src="/assets/hero-bg.jpg"
             alt=""
             fill
-            className="object-cover opacity-30"
+            className="object-cover"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-background/10" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-background/80" />
         </div>
-        <div className="container relative z-10 py-24">
+        <div className="container relative z-10 py-16">
           <div className="mx-auto max-w-4xl text-center">
             <h1 className="animate-fade-in-up text-balance text-4xl font-bold leading-tight tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
               <span>Los </span>
