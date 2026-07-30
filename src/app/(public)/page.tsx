@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import {
   ArrowRight,
   CalendarDays,
@@ -47,76 +48,106 @@ async function PublicHome() {
 
   return (
     <main>
-      <section className="border-b">
-        <div className="container grid min-h-[calc(100vh-4rem)] items-center gap-12 py-20 lg:grid-cols-[1.05fr_0.95fr]">
-          <div className="max-w-3xl space-y-8">
-            <div className="inline-flex items-center gap-2 rounded-md border px-3 py-1 text-sm text-muted-foreground">
-              <TicketCheck className="h-4 w-4 text-accent" />
-              La Jugada Bar — Vive el deporte
-            </div>
-            <div className="space-y-5">
-              <h1 className="text-balance text-5xl font-semibold tracking-tight sm:text-6xl">
-                Vive los mejores eventos deportivos en La Jugada
-              </h1>
-              <p className="max-w-2xl text-lg leading-8 text-muted-foreground">
-                Fútbol, fútbol y más fútbol. Compra tus entradas al instante y
-                asegura tu lugar en el parche oficial del fútbol en Cali.
-              </p>
-            </div>
-            <div className="flex flex-col gap-3 sm:flex-row">
+      <section className="relative flex min-h-[90vh] items-center justify-center overflow-hidden border-b">
+        <div className="absolute inset-0">
+          <Image
+            src="/assets/hero-bg.jpg"
+            alt=""
+            fill
+            className="object-cover opacity-30"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-background/10" />
+        </div>
+        <div className="container relative z-10 py-24">
+          <div className="mx-auto max-w-4xl text-center">
+            <h1 className="animate-fade-in-up text-balance text-4xl font-bold leading-tight tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
+              <span>Los </span>
+              <span>mejores </span>
+              <span>partidos </span>
+              <span>los </span>
+              <span>vives </span>
+              <span>en </span>
+              <span>
+                <span className="text-glow text-primary">La Jugada</span>
+                <span> Bar</span>
+              </span>
+            </h1>
+            <p className="animate-fade-in-up animation-delay-200 mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
+              El parche oficial del fútbol en Cali. Compra tus entradas al
+              instante y asegura tu lugar.
+            </p>
+            <div className="animate-fade-in-up animation-delay-400 mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <Button asChild size="lg">
                 <Link href="/eventos">
-                  Ver eventos
+                  Próximos eventos
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </Button>
             </div>
           </div>
-          <div className="grid gap-4">
-            {[
-              {
-                icon: CalendarDays,
-                title: "Eventos deportivos",
-                text: "Fútbol en pantallas gigantes. Vive cada jugada como si estuvieras en el estadio con la mejor compania."
-              },
-              {
-                icon: TicketCheck,
-                title: "Tickets con QR",
-                text: "Compra y recibe tu codigo QR unico al instante. Acceso rapido y sin filas a todos nuestros eventos."
-              },
-              {
-                icon: MapPin,
-                title: "Dos sedes en Cali",
-                text: "Sede Ingenio y Sede Aristi. El mejor ambiente futbolero te espera en ambas ubicaciones."
-              }
-            ].map((item) => (
-              <div key={item.title} className="rounded-lg border bg-card p-5">
-                <item.icon className="mb-4 h-5 w-5 text-primary" />
-                <h3 className="font-semibold">{item.title}</h3>
-                <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                  {item.text}
-                </p>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
       <section className="container py-20">
-        <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-          <div>
-            <p className="text-sm font-medium text-primary">Proximos eventos</p>
-            <h2 className="mt-2 text-3xl font-semibold tracking-tight">
-              No te pierdas ni una jugada
-            </h2>
-          </div>
-          <Button asChild variant="outline">
-            <Link href="/eventos">Ver todos</Link>
-          </Button>
+        <div className="mx-auto mb-16 max-w-4xl text-center">
+          <p className="text-sm font-medium text-primary">
+            ¿Por qué La Jugada?
+          </p>
+          <h2 className="mt-2 text-3xl font-semibold tracking-tight">
+            Vive el fútbol como nunca antes
+          </h2>
         </div>
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {featuredEvents.map((event) => (
-            <EventCard key={event.id} event={event} />
+        <div className="grid gap-6 md:grid-cols-3">
+          {[
+            {
+              icon: CalendarDays,
+              title: "Pantallas gigantes",
+              text: "Fútbol en vivo con calidad de estadio. Vive cada jugada como si estuvieras en la cancha."
+            },
+            {
+              icon: TicketCheck,
+              title: "Entradas con QR",
+              text: "Compra y recibe tu código QR al instante. Acceso rápido y sin filas a todos nuestros eventos."
+            },
+            {
+              icon: MapPin,
+              title: "Dos sedes en Cali",
+              text: "Sede Ingenio y Sede Aristi. El mejor ambiente futbolero te espera en ambas ubicaciones."
+            }
+          ].map((item) => (
+            <div
+              key={item.title}
+              className="rounded-lg border bg-card p-6 text-center"
+            >
+              <item.icon className="mx-auto mb-4 h-6 w-6 text-primary" />
+              <h3 className="font-semibold">{item.title}</h3>
+              <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                {item.text}
+              </p>
+            </div>
           ))}
+        </div>
+      </section>
+      <section className="border-t bg-muted/30 py-20">
+        <div className="container">
+          <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <div>
+              <p className="text-sm font-medium text-primary">
+                Próximos eventos
+              </p>
+              <h2 className="mt-2 text-3xl font-semibold tracking-tight">
+                No te pierdas ni una jugada
+              </h2>
+            </div>
+            <Button asChild variant="outline">
+              <Link href="/eventos">Ver todos</Link>
+            </Button>
+          </div>
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {featuredEvents.map((event) => (
+              <EventCard key={event.id} event={event} />
+            ))}
+          </div>
         </div>
       </section>
     </main>
