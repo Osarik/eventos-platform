@@ -91,28 +91,28 @@ async function PublicHome() {
       <section className="container py-20">
         <div className="mx-auto mb-16 max-w-4xl text-center">
           <p className="text-sm font-medium text-primary">
-            ¿Por qué La Jugada?
+            Una experiencia vivencial
           </p>
           <h2 className="mt-2 text-3xl font-semibold tracking-tight">
-            Vive el fútbol como nunca antes
+            Historia, fútbol, rumba y musiquita
           </h2>
         </div>
         <div className="grid gap-6 md:grid-cols-3">
           {[
             {
               icon: CalendarDays,
-              title: "Pantallas gigantes",
-              text: "Fútbol en vivo con calidad de estadio. Vive cada jugada como si estuvieras en la cancha."
-            },
-            {
-              icon: TicketCheck,
-              title: "Entradas con QR",
-              text: "Compra y recibe tu código QR al instante. Acceso rápido y sin filas a todos nuestros eventos."
+              title: "Historia del fútbol",
+              text: "Champions actual, Champions vieja y los mundiales desde sus inicios. Un museo viviente para los amantes del fútbol."
             },
             {
               icon: MapPin,
-              title: "Dos sedes en Cali",
-              text: "Sede Ingenio y Sede Aristi. El mejor ambiente futbolero te espera en ambas ubicaciones."
+              title: "Ambiente futbolero",
+              text: "El lugar está vestido de fútbol para que vivas una experiencia vivencial única. Historia, pasión y decoración que te transporta."
+            },
+            {
+              icon: TicketCheck,
+              title: "Rumba y musiquita",
+              text: "Buena música, comida, cócteles y la mejor compañía. La experiencia completa te espera en La Jugada."
             }
           ].map((item) => (
             <div
