@@ -149,16 +149,63 @@ export class TicketMockRepository implements TicketRepository {
   }
 
   async listWithDetails(): Promise<TicketWithDetails[]> {
-    return mockTickets.map((t) => ({
+    return mockTickets.map((t) => this._enrich(t));
+  }
+
+  async listByAttendeeEmail(email: string): Promise<TicketWithDetails[]> {
+    return mockTickets
+      .filter((t) => t.attendee_email === email)
+      .map((t) => this._enrich(t));
+  }
+
+  private _enrich(t: Ticket): TicketWithDetails {
+    const eventLabel =
+      t.evento_id === "evt_001"
+        ? {
+            title: "Neon Sessions Medellin",
+            slug: "neon-sessions-medellin",
+            date: "2026-09-12T21:00:00-05:00",
+            city: "Medellin",
+            venue: "Warehouse 33",
+            category: "musica" as const
+          }
+        : t.evento_id === "evt_002"
+          ? {
+              title: "Summit Creadores Bogota",
+              slug: "summit-creadores-bogota",
+              date: "2026-10-04T09:00:00-05:00",
+              city: "Bogota",
+              venue: "Agora Bogota",
+              category: "conferencia" as const
+            }
+          : {
+              title: "Evento",
+              slug: "evento",
+              date: new Date().toISOString(),
+              city: "Ciudad",
+              venue: "Lugar",
+              category: null
+            };
+
+    const purchaseLabel =
+      t.compra_id === "comp_001"
+        ? { status: "paid" as const, quantity: 2 }
+        : t.compra_id === "comp_002"
+          ? { status: "paid" as const, quantity: 1 }
+          : { status: "pending" as const, quantity: 1 };
+
+    return {
       ...t,
-      event_title:
-        t.evento_id === "evt_001"
-          ? "Neon Sessions Medellin"
-          : t.evento_id === "evt_002"
-            ? "Summit Creadores Bogota"
-            : "Evento",
+      event_title: eventLabel.title,
+      event_slug: eventLabel.slug,
+      event_date: eventLabel.date,
+      event_city: eventLabel.city,
+      event_venue: eventLabel.venue,
+      event_category: eventLabel.category,
+      purchase_status: purchaseLabel.status,
+      purchase_quantity: purchaseLabel.quantity,
       buyer_name: t.attendee_name,
       buyer_email: t.attendee_email
-    }));
+    };
   }
 }

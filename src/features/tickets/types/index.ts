@@ -5,6 +5,13 @@ export type TicketStatusType = TicketStatus;
 
 export type TicketWithDetails = Ticket & {
   event_title?: string;
+  event_slug?: string;
+  event_date?: string;
+  event_city?: string;
+  event_venue?: string;
+  event_category?: string | null;
+  purchase_status?: string;
+  purchase_quantity?: number;
   buyer_name?: string;
   buyer_email?: string;
 };

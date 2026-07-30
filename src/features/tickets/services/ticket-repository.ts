@@ -18,4 +18,5 @@ export interface TicketRepository {
   generateCode(eventSlug: string): string;
   generateSecureToken(): string;
   listWithDetails(): Promise<TicketWithDetails[]>;
+  listByAttendeeEmail(email: string): Promise<TicketWithDetails[]>;
 }
