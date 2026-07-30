@@ -1,6 +1,6 @@
 import { AdminShell } from "@/features/dashboard/components/admin-shell";
 
-export default function ProtectedLayout({
+export default async function ProtectedLayout({
   children
 }: {
   children: React.ReactNode;

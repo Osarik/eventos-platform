@@ -1,8 +1,8 @@
 import { User } from "lucide-react";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 
 import { createSupabaseServerPageClient } from "@/services/supabase/server";
+import { LogoutButton } from "@/features/auth/components/logout-button";
 
 export default async function MiCuentaLayout({
   children
@@ -14,15 +14,11 @@ export default async function MiCuentaLayout({
     data: { user }
   } = await supabase.auth.getUser();
 
-  if (!user) {
-    redirect("/login?next=/mi-cuenta");
-  }
-
   const { data: profile } = await supabase
     .from("usuarios")
     .select("full_name, email")
-    .eq("id", user.id)
-    .single();
+    .eq("id", user?.id ?? "")
+    .maybeSingle();
 
   return (
     <main className="container py-10">
@@ -34,16 +30,19 @@ export default async function MiCuentaLayout({
           <div>
             <h1 className="text-xl font-semibold">Mi Cuenta</h1>
             <p className="text-sm text-muted-foreground">
-              {profile?.full_name ?? profile?.email ?? user.email}
+              {profile?.full_name ?? profile?.email ?? user?.email}
             </p>
           </div>
         </div>
-        <Link
-          href="/eventos"
-          className="text-sm text-muted-foreground underline-offset-4 hover:text-primary hover:underline"
-        >
-          Ver eventos
-        </Link>
+        <div className="flex items-center gap-3">
+          <Link
+            href="/eventos"
+            className="text-sm text-muted-foreground underline-offset-4 hover:text-primary hover:underline"
+          >
+            Ver eventos
+          </Link>
+          <LogoutButton />
+        </div>
       </div>
       {children}
     </main>

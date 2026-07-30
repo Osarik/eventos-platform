@@ -7,10 +7,11 @@ type SupabaseCookie = {
   options: CookieOptions;
 };
 
+const ADMIN_ROUTES = ["/dashboard", "/scanner"];
+const USER_ROUTES = ["/mi-cuenta"];
+
 export async function middleware(request: NextRequest) {
-  let response = NextResponse.next({
-    request
-  });
+  let response = NextResponse.next({ request });
 
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -40,21 +41,46 @@ export async function middleware(request: NextRequest) {
     data: { user }
   } = await supabase.auth.getUser();
 
-  const isProtectedRoute =
-    request.nextUrl.pathname.startsWith("/dashboard") ||
-    request.nextUrl.pathname.startsWith("/scanner") ||
-    request.nextUrl.pathname.startsWith("/mi-cuenta");
+  const pathname = request.nextUrl.pathname;
+  const isAdminRoute = ADMIN_ROUTES.some((r) => pathname.startsWith(r));
+  const isUserRoute = USER_ROUTES.some((r) => pathname.startsWith(r));
 
-  if (isProtectedRoute && !user) {
-    const redirectUrl = request.nextUrl.clone();
-    redirectUrl.pathname = "/login";
-    redirectUrl.searchParams.set("next", request.nextUrl.pathname);
-    return NextResponse.redirect(redirectUrl);
+  if (isAdminRoute && !user) {
+    return redirectTo(request, "/login");
+  }
+
+  if (isAdminRoute && user) {
+    const { data: profile } = await supabase
+      .from("usuarios")
+      .select("role")
+      .eq("id", user.id)
+      .single();
+
+    const allowed = ["super_admin", "admin", "staff"];
+    if (!profile || !allowed.includes(profile.role)) {
+      return redirectTo(request, "/acceso-denegado");
+    }
+  }
+
+  if (isUserRoute && !user) {
+    return redirectTo(request, "/login");
   }
 
   return response;
 }
 
+function redirectTo(request: NextRequest, path: string) {
+  const url = request.nextUrl.clone();
+  url.pathname = path;
+  url.searchParams.set("next", request.nextUrl.pathname);
+  return NextResponse.redirect(url);
+}
+
 export const config = {
-  matcher: ["/dashboard/:path*", "/scanner/:path*"]
+  matcher: [
+    "/dashboard/:path*",
+    "/scanner/:path*",
+    "/mi-cuenta/:path*",
+    "/mi-cuenta"
+  ]
 };

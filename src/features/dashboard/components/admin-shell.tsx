@@ -2,6 +2,7 @@ import Link from "next/link";
 import {
   BarChart3,
   CalendarDays,
+  Circle,
   QrCode,
   Settings,
   Ticket,
@@ -9,6 +10,8 @@ import {
 } from "lucide-react";
 
 import { ThemeToggle } from "@/components/layout/theme-toggle";
+import { LogoutButton } from "@/features/auth/components/logout-button";
+import { createSupabaseServerPageClient } from "@/services/supabase/server";
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: BarChart3 },
@@ -19,14 +22,34 @@ const navItems = [
   { href: "/dashboard/configuracion", label: "Config", icon: Settings }
 ];
 
-export function AdminShell({ children }: { children: React.ReactNode }) {
+export async function AdminShell({ children }: { children: React.ReactNode }) {
+  const supabase = await createSupabaseServerPageClient();
+  const {
+    data: { user }
+  } = await supabase.auth.getUser();
+
+  const { data: profile } = await supabase
+    .from("usuarios")
+    .select("full_name, email, role")
+    .eq("id", user?.id ?? "")
+    .maybeSingle();
+
+  const displayName =
+    profile?.full_name ?? profile?.email ?? user?.email ?? "Admin";
+  const roleLabel =
+    profile?.role === "super_admin"
+      ? "Super Administrador"
+      : profile?.role === "admin"
+        ? "Administrador"
+        : "Staff";
+
   return (
     <div className="min-h-screen bg-muted/30">
-      <aside className="fixed inset-y-0 left-0 hidden w-64 border-r bg-background lg:block">
+      <aside className="fixed inset-y-0 left-0 hidden w-64 border-r bg-background lg:flex lg:flex-col">
         <div className="flex h-16 items-center border-b px-6 font-semibold">
           Eventos Admin
         </div>
-        <nav className="space-y-1 p-3">
+        <nav className="flex-1 space-y-1 overflow-y-auto p-3">
           {navItems.map((item) => (
             <Link
               key={item.href}
@@ -38,16 +61,44 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
             </Link>
           ))}
         </nav>
+        <div className="border-t p-4">
+          <div className="flex items-center gap-3">
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-sm font-medium text-primary">
+              {displayName.charAt(0).toUpperCase()}
+            </div>
+            <div className="flex-1 truncate">
+              <p className="truncate text-sm font-medium">{displayName}</p>
+              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                <Circle className="h-2 w-2 fill-accent text-accent" />
+                En linea
+              </div>
+            </div>
+          </div>
+          <div className="mt-3 space-y-1">
+            <Link
+              href="/"
+              className="block rounded-md px-3 py-1.5 text-xs text-muted-foreground hover:bg-secondary hover:text-foreground"
+            >
+              Mi perfil
+            </Link>
+            <div className="px-3 py-1.5 text-xs text-muted-foreground">
+              <LogoutButton variant="ghost" />
+            </div>
+          </div>
+        </div>
       </aside>
       <div className="lg:pl-64">
         <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b bg-background/85 px-4 backdrop-blur lg:px-8">
           <div>
-            <p className="text-sm text-muted-foreground">
-              Panel administrativo
-            </p>
-            <h1 className="text-base font-semibold">Operacion de eventos</h1>
+            <p className="text-sm text-muted-foreground">{roleLabel}</p>
+            <h1 className="text-base font-semibold">Panel administrativo</h1>
           </div>
-          <ThemeToggle />
+          <div className="flex items-center gap-3">
+            <span className="hidden text-sm text-muted-foreground md:block">
+              {displayName}
+            </span>
+            <ThemeToggle />
+          </div>
         </header>
         <main className="px-4 py-8 lg:px-8">{children}</main>
       </div>
