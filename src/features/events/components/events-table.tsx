@@ -49,10 +49,6 @@ export function EventsTable({
     setDeletingId(null);
   }
 
-  function isPastEvent(startsAt: string) {
-    return new Date(startsAt) < new Date();
-  }
-
   return (
     <>
       <Table>
@@ -94,15 +90,13 @@ export function EventsTable({
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    {isPastEvent(event.starts_at) && (
-                      <DropdownMenuItem
-                        className="text-destructive"
-                        onClick={() => setDeletingId(event.id)}
-                      >
-                        <Trash2 className="mr-2 h-4 w-4" />
-                        Eliminar
-                      </DropdownMenuItem>
-                    )}
+                    <DropdownMenuItem
+                      className="text-destructive"
+                      onClick={() => setDeletingId(event.id)}
+                    >
+                      <Trash2 className="mr-2 h-4 w-4" />
+                      Eliminar
+                    </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </TableCell>
