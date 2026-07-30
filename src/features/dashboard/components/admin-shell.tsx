@@ -3,12 +3,21 @@ import {
   BarChart3,
   CalendarDays,
   Circle,
+  Menu,
   QrCode,
   Settings,
   Ticket,
   Users
 } from "lucide-react";
 
+import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger
+} from "@/components/ui/sheet";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { LogoutButton } from "@/features/auth/components/logout-button";
 import { createSupabaseServerPageClient } from "@/services/supabase/server";
@@ -89,9 +98,40 @@ export async function AdminShell({ children }: { children: React.ReactNode }) {
       </aside>
       <div className="lg:pl-64">
         <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b bg-background/85 px-4 backdrop-blur lg:px-8">
-          <div>
-            <p className="text-sm text-muted-foreground">{roleLabel}</p>
-            <h1 className="text-base font-semibold">Panel administrativo</h1>
+          <div className="flex items-center gap-3">
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="lg:hidden"
+                  aria-label="Abrir menu"
+                >
+                  <Menu className="h-5 w-5" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left" className="w-64 p-0">
+                <SheetHeader className="flex h-16 flex-row items-center border-b px-6">
+                  <SheetTitle className="text-base">Eventos Admin</SheetTitle>
+                </SheetHeader>
+                <nav className="flex-1 space-y-1 overflow-y-auto p-3">
+                  {navItems.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className="flex items-center gap-3 rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground"
+                    >
+                      <item.icon className="h-4 w-4" />
+                      {item.label}
+                    </Link>
+                  ))}
+                </nav>
+              </SheetContent>
+            </Sheet>
+            <div>
+              <p className="text-sm text-muted-foreground">{roleLabel}</p>
+              <h1 className="text-base font-semibold">Panel administrativo</h1>
+            </div>
           </div>
           <div className="flex items-center gap-3">
             <span className="hidden text-sm text-muted-foreground md:block">
