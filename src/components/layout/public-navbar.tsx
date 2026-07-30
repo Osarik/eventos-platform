@@ -19,7 +19,7 @@ export async function PublicNavbar() {
           <span className="flex h-9 w-9 items-center justify-center rounded-md bg-primary text-primary-foreground">
             <CalendarDays className="h-5 w-5" />
           </span>
-          Eventos Platform
+          La Jugada
         </Link>
         <nav className="hidden items-center gap-6 text-sm text-muted-foreground md:flex">
           <Link href="/eventos" className="hover:text-foreground">

@@ -7,10 +7,10 @@ export function Footer() {
       <div className="container py-10">
         <div className="grid gap-8 md:grid-cols-3">
           <div>
-            <h3 className="mb-3 text-sm font-semibold">Eventos Platform</h3>
+            <h3 className="mb-3 text-sm font-semibold">La Jugada Bar</h3>
             <p className="text-sm text-muted-foreground">
-              Venta y validacion de entradas para eventos. Compra segura con
-              codigos QR y validacion en tiempo real.
+              Venta de entradas para eventos en La Jugada Bar. Vive el fútbol
+              con la mejor compania, comida y cocteles.
             </p>
           </div>
           <div>
@@ -35,7 +35,7 @@ export function Footer() {
           </div>
         </div>
         <div className="mt-8 border-t pt-6 text-center text-xs text-muted-foreground/50">
-          Eventos Platform &mdash; SaaS de boleteria
+          La Jugada Bar &mdash; Tu parche oficial del fútbol
         </div>
       </div>
     </footer>

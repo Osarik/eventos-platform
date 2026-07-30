@@ -52,15 +52,15 @@ async function PublicHome() {
           <div className="max-w-3xl space-y-8">
             <div className="inline-flex items-center gap-2 rounded-md border px-3 py-1 text-sm text-muted-foreground">
               <TicketCheck className="h-4 w-4 text-accent" />
-              SaaS de boleteria preparado para crecer
+              La Jugada Bar — Vive el deporte
             </div>
             <div className="space-y-5">
               <h1 className="text-balance text-5xl font-semibold tracking-tight sm:text-6xl">
-                Descubre y asegura tu entrada
+                Vive los mejores eventos deportivos en La Jugada
               </h1>
               <p className="max-w-2xl text-lg leading-8 text-muted-foreground">
-                Los mejores eventos, conciertos y experiencias culturales.
-                Compra tus entradas al instante con codigos QR seguros.
+                Fútbol, fútbol y más fútbol. Compra tus entradas al instante y
+                asegura tu lugar en el parche oficial del fútbol en Cali.
               </p>
             </div>
             <div className="flex flex-col gap-3 sm:flex-row">
@@ -76,18 +76,18 @@ async function PublicHome() {
             {[
               {
                 icon: CalendarDays,
-                title: "Eventos exclusivos",
-                text: "Conciertos, conferencias, festivales y experiencias culturales seleccionadas para ti."
+                title: "Eventos deportivos",
+                text: "Fútbol en pantallas gigantes. Vive cada jugada como si estuvieras en el estadio con la mejor compania."
               },
               {
                 icon: TicketCheck,
                 title: "Tickets con QR",
-                text: "Compra y recibe tu codigo QR unico al instante. Entrada segura sin filas."
+                text: "Compra y recibe tu codigo QR unico al instante. Acceso rapido y sin filas a todos nuestros eventos."
               },
               {
                 icon: MapPin,
-                title: "Cobertura nacional",
-                text: "Eventos en las principales ciudades de Colombia. Siempre hay algo cerca de ti."
+                title: "Dos sedes en Cali",
+                text: "Sede Ingenio y Sede Aristi. El mejor ambiente futbolero te espera en ambas ubicaciones."
               }
             ].map((item) => (
               <div key={item.title} className="rounded-lg border bg-card p-5">
@@ -104,9 +104,9 @@ async function PublicHome() {
       <section className="container py-20">
         <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="text-sm font-medium text-primary">Eventos activos</p>
+            <p className="text-sm font-medium text-primary">Proximos eventos</p>
             <h2 className="mt-2 text-3xl font-semibold tracking-tight">
-              Experiencias listas para vivir
+              No te pierdas ni una jugada
             </h2>
           </div>
           <Button asChild variant="outline">
