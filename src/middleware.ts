@@ -50,14 +50,19 @@ export async function middleware(request: NextRequest) {
   }
 
   if (isAdminRoute && user) {
-    const { data: profile } = await supabase
-      .from("usuarios")
-      .select("role")
-      .eq("id", user.id)
-      .single();
+    let role = user.app_metadata?.role as string | undefined;
+
+    if (!role) {
+      const { data: profile } = await supabase
+        .from("usuarios")
+        .select("role")
+        .eq("id", user.id)
+        .maybeSingle();
+      role = profile?.role;
+    }
 
     const allowed = ["super_admin", "admin", "staff"];
-    if (!profile || !allowed.includes(profile.role)) {
+    if (!role || !allowed.includes(role)) {
       return redirectTo(request, "/acceso-denegado");
     }
   }

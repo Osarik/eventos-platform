@@ -29,6 +29,13 @@ async function main() {
   if (ue) { console.error("Error usuario:", ue); process.exit(1); }
   console.log("Usuario upserted");
 
+  // Set role in app_metadata so middleware can read it from the JWT
+  const { error: ae } = await supabase.auth.admin.updateUserById(userId, {
+    app_metadata: { ...existing.app_metadata, role: "super_admin" }
+  });
+  if (ae) { console.error("Error updating app_metadata:", ae); process.exit(1); }
+  console.log("App metadata updated with role");
+
   // Upsert organization
   const { data: org, error: oe } = await supabase
     .from("organizations")
