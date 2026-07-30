@@ -12,10 +12,10 @@ import {
 import { EventCard } from "@/features/events/components/event-card";
 import { Button } from "@/components/ui/button";
 import { EventMockRepository } from "@/features/events/services/event-mock-repository";
-import { createSupabaseServerClient } from "@/services/supabase/server";
+import { createSupabaseServerPageClient } from "@/services/supabase/server";
 
 export default async function HomePage() {
-  const supabase = await createSupabaseServerClient();
+  const supabase = await createSupabaseServerPageClient();
   const {
     data: { user }
   } = await supabase.auth.getUser();
@@ -161,8 +161,8 @@ async function AdminDashboard({ role }: { role: string }) {
   const events = await eventRepo.list();
   const totalCapacity = events.reduce((acc, e) => acc + e.capacity, 0);
 
-  const supabase = await createSupabaseServerClient();
-  const { count: ticketCount } = await supabase
+  const supabasePage = await createSupabaseServerPageClient();
+  const { count: ticketCount } = await supabasePage
     .from("tickets")
     .select("*", { count: "exact", head: true });
 
