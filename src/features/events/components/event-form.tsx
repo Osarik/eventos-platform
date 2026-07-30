@@ -1,7 +1,9 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Save } from "lucide-react";
+import { ImagePlus, Save, X } from "lucide-react";
+import Image from "next/image";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
@@ -12,27 +14,64 @@ import {
   eventFormSchema,
   type EventFormValues
 } from "@/features/events/validators";
+import { EventMockRepository } from "@/features/events/services/event-mock-repository";
 
-export function EventForm() {
+const repo = new EventMockRepository();
+
+export function EventForm({ onSuccess }: { onSuccess?: () => void }) {
+  const [preview, setPreview] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting }
+    formState: { errors, isSubmitting },
+    reset
   } = useForm<EventFormValues>({
     resolver: zodResolver(eventFormSchema),
     defaultValues: {
-      title: "Nuevo evento",
+      title: "",
       status: "draft",
       price: 0,
       capacity: 100
     }
   });
 
-  function onSubmit(values: EventFormValues) {
-    void values;
-    alert(
-      "Formulario visual listo. La persistencia con Supabase va en el siguiente sprint."
-    );
+  function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const f = e.target.files?.[0];
+    if (!f) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => setPreview(ev.target?.result as string);
+    reader.readAsDataURL(f);
+  }
+
+  function clearFile() {
+    setPreview(null);
+  }
+
+  async function onSubmit(values: EventFormValues) {
+    const slug = values.title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "");
+
+    await repo.create({
+      owner_id: "user_demo",
+      organization_id: "org_001",
+      slug,
+      title: values.title,
+      description: values.description,
+      venue: values.venue,
+      city: values.city,
+      address: values.address,
+      starts_at: new Date(values.startsAt).toISOString(),
+      price_cop: values.price,
+      capacity: values.capacity,
+      status: values.status,
+      image_path: preview ?? undefined
+    });
+
+    reset();
+    clearFile();
+    onSuccess?.();
   }
 
   return (
@@ -62,6 +101,39 @@ export function EventForm() {
             {errors.description.message}
           </p>
         )}
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="flyer">Flyer del evento</Label>
+        <div className="flex items-start gap-4">
+          {preview ? (
+            <div className="relative aspect-[3/4] w-32 overflow-hidden rounded-md border">
+              <Image
+                src={preview}
+                alt="Preview"
+                fill
+                className="object-cover"
+              />
+              <button
+                type="button"
+                onClick={clearFile}
+                className="absolute right-1 top-1 rounded-full bg-background/80 p-0.5"
+              >
+                <X className="h-3 w-3" />
+              </button>
+            </div>
+          ) : (
+            <label className="flex aspect-[3/4] w-32 cursor-pointer flex-col items-center justify-center rounded-md border border-dashed text-muted-foreground hover:border-primary hover:text-primary">
+              <ImagePlus className="h-6 w-6" />
+              <span className="mt-1 text-xs">Subir</span>
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleFile}
+              />
+            </label>
+          )}
+        </div>
       </div>
       <div className="space-y-2">
         <Label htmlFor="city">Ciudad</Label>

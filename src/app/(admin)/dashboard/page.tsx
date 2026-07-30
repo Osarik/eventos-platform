@@ -54,7 +54,7 @@ export default async function DashboardPage() {
           <CardTitle>Eventos recientes</CardTitle>
         </CardHeader>
         <CardContent>
-          <EventsTable events={events} />
+          <EventsTable initialEvents={events} />
         </CardContent>
       </Card>
     </div>
