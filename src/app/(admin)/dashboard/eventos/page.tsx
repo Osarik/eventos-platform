@@ -27,7 +27,7 @@ export default async function AdminEventsPage() {
           </p>
         </CardHeader>
         <CardContent>
-          <EventForm onSuccess={() => {}} />
+          <EventForm />
         </CardContent>
       </Card>
       <Card>
